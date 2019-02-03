@@ -28,7 +28,7 @@ def multivariableRegression(X, Y, theta):
 		gradients = gradientDescent(X, Y, theta)		
 		for i in range(n):
 			new_theta[i][0] =  theta[i] - (alpha * 1/m * gradients[i])
-		new_theta = theta
+		theta = new_theta
 
 	return theta	
 
@@ -45,7 +45,7 @@ def main():
 
 	theta = np.array([[42.0], [10.0], [12.0]])	
 
-	new_theta = singlevariableRegression(X, Y, theta)
+	new_theta = multivariableRegression(X, Y, theta)
 	print("final error:")
 	print(computeError(X, Y, new_theta))
 	print("final theta:")
