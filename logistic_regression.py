@@ -2,7 +2,7 @@ import numpy as np
 
 #hypothesis
 def computeH(X, theta):
-	return (np.matmul(theta.transpose(), X))
+	return 1/(1+np.exp(-1*(np.matmul(theta.transpose(), X))))
 
 #loss
 def computeL(h, Y):
@@ -13,9 +13,8 @@ def gradientDescent(X, Y, theta):
 	l = computeL(h, Y)
 	return(np.matmul(l, X.transpose())[0])
 
-def normalEquation(X, Y, theta):	
 
-def multivariableRegression(X, Y, theta):
+def logisticRegression(X, Y, theta):
 	#learnig rate
 	alpha = 0.05
 	#number of features
@@ -34,23 +33,15 @@ def multivariableRegression(X, Y, theta):
 	return theta	
 
 
-def computeError(X, Y, theta):
-
-	error = (np.sum(computeL(computeH(X, theta),Y)))
-	return error
-
 def main():
-	Y = np.array([1.0, 4.0, 6.0])
+
+	Y = np.array([1.0, 1.0,1.0])
 
 	X = np.array([[1.0,1.0,1.0], [0.0, 1.0, 2.0], [0.0, 1.0, 1.0]])
 
 	theta = np.array([[42.0], [10.0], [12.0]])	
 
-	new_theta = multivariableRegression(X, Y, theta)
-	print("final error:")
-	print(computeError(X, Y, new_theta))
-	print("final theta:")
-	print(new_theta)
+	print(computeH(X, theta))
 
 if __name__ == '__main__':
 	main()
