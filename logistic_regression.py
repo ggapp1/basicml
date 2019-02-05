@@ -21,7 +21,8 @@ def logisticRegression(X, Y, theta):
 	n = len(theta)
 	#batch size
 	m = 3.0 
-
+	#regularization parameter
+	l = 0 
 	new_theta = theta
 
 	for i in range(2000):
