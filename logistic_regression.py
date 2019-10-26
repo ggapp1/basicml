@@ -1,48 +1,56 @@
 import numpy as np
-
-#hypothesis
-def computeH(X, theta):
-	return 1/(1+np.exp(-1*(np.matmul(theta.transpose(), X))))
-
-#loss
-def computeL(h, Y):
-	return np.subtract(h, Y)
-
-def gradientDescent(X, Y, theta):
-	h = computeH(X, theta)
-	l = computeL(h, Y)
-	return(np.matmul(l, X.transpose())[0])
+import matplotlib.pyplot as plt
+import h5py
+import scipy
 
 
-def logisticRegression(X, Y, theta):
+def sigmoid(x, w, b):
+	return 1/(1+np.exp(-1*(np.dot(w, x) + b)))
+
+def gradientDescent(X, Y, w, b):
+	Z = np.dot(w.transpose(), X) + b
+	A = sigmoid(Z)
+	#number of features
+	m = len(X)
+	dz = A - Y
+	db = 1/m * sum(dz)
+	dw = 1/m * np.dot(X, dz.T)  
+	
+	return dw, db
+
+def logisticRegression(X, Y,n):
+	w = np.random()
+	b = np.random()
 	#learnig rate
 	alpha = 0.05
-	#number of features
-	n = len(theta)
-	#batch size
-	m = 3.0 
-	#regularization parameter
-	l = 0 
-	new_theta = theta
 
-	for i in range(2000):
-		gradients = gradientDescent(X, Y, theta)		
-		for i in range(n):
-			new_theta[i][0] =  theta[i] - (alpha * 1/m * gradients[i])
-		theta = new_theta
+	for i in range(n):         	                        
+		dw, db = gradientDescent(X, Y, w, b)
+		w = w - alpha * dw
+		b = b - alpha * db
+	
+	return w	
 
-	return theta	
+def load_dataset():
+    with h5py.File('datasets/train_catvnoncat.h5', "r") as train_dataset:
+        train_set_x_orig = np.array(train_dataset["train_set_x"][:])
+        train_set_y_orig = np.array(train_dataset["train_set_y"][:])
 
+    with h5py.File('datasets/test_catvnoncat.h5', "r") as test_dataset:
+        test_set_x_orig = np.array(test_dataset["test_set_x"][:])
+        test_set_y_orig = np.array(test_dataset["test_set_y"][:])
+        classes = np.array(test_dataset["list_classes"][:])
+
+    train_set_y_orig = train_set_y_orig.reshape((1, train_set_y_orig.shape[0]))
+    test_set_y_orig = test_set_y_orig.reshape((1, test_set_y_orig.shape[0]))
+
+    return train_set_x_orig, train_set_y_orig, test_set_x_orig, test_set_y_orig, classes
 
 def main():
 
-	Y = np.array([1.0, 1.0,1.0])
+	train_set_x_orig, train_set_y, test_set_x_orig, test_set_y, classes = load_dataset()
 
-	X = np.array([[1.0,1.0,1.0], [0.0, 1.0, 2.0], [0.0, 1.0, 1.0]])
-
-	theta = np.array([[42.0], [10.0], [12.0]])	
-
-	print(computeH(X, theta))
+	print(logisticRegression(X, Y))
 
 if __name__ == '__main__':
 	main()
