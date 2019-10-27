@@ -66,7 +66,9 @@ def gradient_descent(X, Y, w, b):
 	db -- gradient of the loss with respect to b, thus same shape as b
 	cost -- negative log-likelihood cost for logistic regression
 	"""
-	A = sigmoid(np.dot(w.T, X) + b)	
+	A = sigmoid(np.dot(w.T, X) + b)
+	print(A.shape, w.shape, X.shape, Y.shape)
+	exit()	
 	#number of features
 	m = X.shape[0]
 	dz = A - Y
@@ -117,7 +119,6 @@ def predict(X, w, b):
 	Returns:
 	A -- a numpy array (vector) containing all predictions (0/1) for the examples in X
 	'''
-	m = X.shape[1]
 	w = w.reshape(X.shape[0], 1)
 	A = sigmoid(np.dot(w.T, X) + b)	
 	A[A <= 0.5] = 0
@@ -262,7 +263,6 @@ def main():
 	#reshape dataset
 	train_set_x = train_set_x_orig.reshape(train_set_x_orig.shape[0], -1).T/255.
 	test_set_x =  test_set_x_orig.reshape(test_set_x_orig.shape[0], -1).T/255.
-
 	model = logistic_regression(train_set_x, train_set_y, test_set_x, test_set_y)
 	plot_learning_curve(model)
 	test_learning_rates(train_set_x, train_set_y, test_set_x, test_set_y)
