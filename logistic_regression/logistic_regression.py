@@ -221,15 +221,6 @@ def test_learning_rates(train_set_x, train_set_y, test_set_x, test_set_y):
 	ax.xaxis.set_major_formatter(plt.FixedFormatter(learning_rates))
 	plt.show()
 
-def subcategorybar(X, vals, width=0.8):
-	n = len(vals)
-	label = ['train', 'test']
-	_X = np.arange(len(X))
-	for i in range(n):
-		plt.bar(_X - width/2. + i/float(n)*width, vals[i], label='inferno',
-				width=width/float(n), align="edge")   
-	plt.xticks(_X, X)
-
 def test_epochs(train_set_x, train_set_y, test_set_x, test_set_y):
 	"""
 	Plot the  accuracy varying the number of epochs
