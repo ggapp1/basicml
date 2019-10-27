@@ -115,10 +115,9 @@ def predict(X, w, b):
 	b -- bias, a scalar
 
 	Returns:
-	Y_prediction -- a numpy array (vector) containing all predictions (0/1) for the examples in X
+	A -- a numpy array (vector) containing all predictions (0/1) for the examples in X
 	'''
 	m = X.shape[1]
-	Y_prediction = np.zeros((1,m))
 	w = w.reshape(X.shape[0], 1)
 	A = sigmoid(np.dot(w.T, X) + b)	
 	A[A <= 0.5] = 0
