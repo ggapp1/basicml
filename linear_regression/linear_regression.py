@@ -9,13 +9,14 @@ def load_dataset():
 	Load the boston housing prices dataset
 
 	Return:
-	train_set_x, train_set_y -- (x,y) of training set
-	test_set_x, test_set_y -- (x,y) of testing set
+	X_train, Y_train -- (x,y) of training set
+	X_test, X_test -- (x,y) of testing set
 	"""	
 	dataset = load_boston()
 	boston = pd.DataFrame(dataset.data, columns=dataset.feature_names)
 	boston['MEDV'] = dataset.target
-	#divide train and test set with aprox 80/20 proportion
+	
+	#divide train and test set
 	X = pd.DataFrame(np.c_[boston['LSTAT'], boston['RM']], columns = ['LSTAT','RM'])
 	Y = boston['MEDV']
 	X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state=5)
@@ -41,12 +42,12 @@ def gradient_descent(X, Y, w, b):
 	w -- weights, a numpy array of size (number of features, 1)
 	b -- bias, a scalar
 	X -- data of size (number of features, number of examples)
-	Y -- true "label" vector (containing 0 if non-cat, 1 if cat) of size (1, number of examples)
+	Y -- vector containing the actual house prices of size (1, number of examples)
 
 	Return:
 	dw -- gradient of the loss with respect to w, thus same shape as w
 	db -- gradient of the loss with respect to b, thus same shape as b
-	cost -- negative log-likelihood cost for logistic regression
+	cost -- avg square difference between predicted and actual prices
 	"""
 	A = np.dot(w.T, X) + b
 	#number of features
@@ -63,7 +64,7 @@ def optimize(X, Y, w, b, epochs, learning_rate):
 	w -- weights, a numpy array of size (number of features, 1)
 	b -- bias, a scalar
 	X -- data of shape (number of features, number of examples)
-	Y -- true "label" vector (containing 0 if non-cat, 1 if cat), of shape (1, number of examples)
+	Y -- vector containing the actual house prices of size (1, number of examples)
 	epochs -- number of iterations of the optimization loop
 	learning_rate -- learning rate of the gradient descent update rule
 	
@@ -86,7 +87,7 @@ def optimize(X, Y, w, b, epochs, learning_rate):
 
 def predict(X, w, b):
 	'''
-	Predict whether the label is 0 or 1 using learned parameters (w, b)
+	Predict the house prices using learned parameters (w, b)
 	
 	Arguments:
 	X -- data of size (number of features, number of examples)
@@ -94,21 +95,20 @@ def predict(X, w, b):
 	b -- bias, a scalar
 
 	Returns:
-	A -- a numpy array (vector) containing all predictions (0/1) for the examples in X
+	A -- vector containing the predicted house prices of size (1, number of examples) for the examples in X
 	'''
-	#w = w.reshape(X.shape[1], 1)
 	A = np.dot(w.T, X) + b
 	return A	
 
-def linear_regression(X_train, Y_train, X_test, Y_test, epochs = 2000, learning_rate = 0.005):
+def linear_regression(X_train, Y_train, X_test, Y_test, epochs = 10000, learning_rate = 0.005):
 	"""
 	Builds the logistic regression model by calling the function you've implemented previously
 
 	Arguments:
 	X_train -- training set represented by a numpy array of shape (number of features, m_train)
-	Y_train -- training labels represented by a numpy array (vector) of shape (1, m_train)
+	Y_train -- training values represented by a numpy array (vector) of shape (1, m_train)
 	X_test -- test set represented by a numpy array of shape (number of features, m_test)
-	Y_test -- test labels represented by a numpy array (vector) of shape (1, m_test)
+	Y_test -- test values represented by a numpy array (vector) of shape (1, m_test)
 	epochs -- hyperparameter representing the number of iterations to optimize the parameters
 	learning_rate -- hyperparameter representing the learning rate used in the update rule of optimize()
 	
@@ -143,8 +143,7 @@ def main():
 	X_train, Y_train, X_test, Y_test = load_dataset()
 
 	print(X_train.shape, Y_train.shape, X_test.shape, Y_train.shape)
-	#NN(X,Y,test_set_x, test_set_y)
-#	w, b, X, Y = np.array([[1.]]), 2., np.array([[1.,2.]]), np.array([[10,50]])
+
 	linear_regression(X_train, Y_train, X_test, X_test)
 
 if __name__ == '__main__':
